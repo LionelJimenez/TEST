@@ -50,6 +50,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\style.css" />
     <Content Include="Default.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -67,7 +68,21 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Post.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="css\helr45.eot" />
+    <None Include="css\helr45.svg" />
+    <None Include="css\helr45.ttf" />
+    <None Include="css\helr45.woff" />
+    <None Include="css\hneulight.eot" />
+    <None Include="css\hneulight.svg" />
+    <None Include="css\hneulight.ttf" />
+    <None Include="css\hneulight.woff" />
+    <None Include="css\semenr.eot" />
+    <None Include="css\semenr.ttf" />
+    <None Include="css\semenr.woff" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
@@ -77,7 +92,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>19619</DevelopmentServerPort>
+          <DevelopmentServerPort>19658</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
