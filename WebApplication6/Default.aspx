@@ -7,9 +7,9 @@
     <title>Untitled Document</title>
     <link href="css/style.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
+<body style="background-color:#E7EBF2;">
     <form id="Form1" runat="server">
-    <div id="wrapper100">
+    <div id="wrapper100" style="background-color:#E7EBF2;">
         <div id="Total-Top" style="height: 150px; margin-left: 58px;">
             <div id="Navigation" style="float: right; padding-bottom: 10px; margin-top: 35px;">
                 <div style="padding-top: 20px; padding-bottom: 20px; padding-left: 5px; padding-right: 5px;
@@ -21,7 +21,7 @@
             </div>
         </div>
         <div id="DownZone" style="width: 900px; display: block;">
-            <div style="min-height: 550px; width: 196px; border: 1px solid; float: left;">
+            <div style=" background-color:White; min-height: 150px; width: 190px; border: 1px solid; float: left;">
                 <div style="margin-top: 20px;">
                     <asp:Label ID="Label2" runat="server" Style="margin-left: 20px; float: left;">MOT CLE:</asp:Label>
                     <asp:TextBox ID="txtbxSearchArticle" runat="server" Style="margin-left: 20px; float: left;
@@ -34,14 +34,14 @@
                         float: left; margin-top: 10px; width: 150px; color: Black;">
                     </asp:DropDownList>
                     <input type="hidden" runat="server" id="hidden1" />
-                    <asp:LinkButton ID="LnkBtnValiderRech" OnClick="SearchArticle" runat="server" Style="margin-left: 20px;
-                        float: left; margin-top: 20px;">VALIDER</asp:LinkButton>
+                    <asp:LinkButton ID="LnkBtnValiderRech" OnClick="SearchArticle" runat="server" Style="color:Black;text-decoration:none; margin-left: 20px;
+                        float: left; margin-top: 20px; border:1px solid;">VALIDER</asp:LinkButton>
                 </div>
                 <div style="margin-top: 250px;">
-                    <asp:LinkButton runat="server" ID="Span3" Style="margin-left: 20px; float: left;" OnClick="PostSelection">ADD A NEW POST</asp:LinkButton>
+                    <asp:LinkButton runat="server" ID="Span3" Style="margin-bottom:20px; margin-left: 20px; float: left; color:Black;text-decoration:none; border:1px solid;" OnClick="PostSelection">ADD A NEW POST</asp:LinkButton>
                 </div>
             </div>
-            <div style="min-height: 550px; width: 700px; float: right; border: 1px solid;">
+            <div style="background-color:White; min-height: 550px; width: 700px; float: right; border: 1px solid;">
                 <asp:Panel ID="PnlViewSearch" runat="server" style="margin-bottom:20px;">
                     <div style="margin-top: 20px; margin-left: 20px; text-decoration: underline;">
                         <span id="Span2">LASTEST POSTS</span>
