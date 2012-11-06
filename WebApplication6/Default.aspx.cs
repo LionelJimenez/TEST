@@ -707,7 +707,7 @@ namespace WebApplication6
                             + "<h2>VALIDATION DE VOTRE ADRESSE EMAIL</h2>"
                             + "<p>"
                             + "<span>Veuillez valider votre email en cliquant sur le lien suivant :</span><br />"
-                            + "<a href=" + "http://www.google.be" + ">Lien de validation</a>"
+                            + "<a href=http://servicesexchange.apphb.com/Default.aspx?Lgn=" + Login + "&Ps=" + Pass + ">Lien de validation</a>"
                             + "</p>"
                             + "</body>"
                             + "</html>";
