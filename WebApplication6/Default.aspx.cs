@@ -495,8 +495,8 @@ namespace WebApplication6
                         //New User
                         int iduser = CreateUser(Login.Value, Pass.Value);
                         //Post
-                        AddPost(iduser, hiddenddlbCat1.Value);
                         SendMail(Login.Value);
+                        AddPost(iduser, hiddenddlbCat1.Value);
                         PnlAddPost.Visible = false;
                         PnlBadAfterConf.Visible = true;
                         RefreshCurrentPost();
