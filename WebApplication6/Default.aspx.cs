@@ -56,11 +56,13 @@ namespace WebApplication6
                                 BEGIN
                                     SELECT [ID]
                                     ,[Categorie]
-                                    FROM [SE].[dbo].[Categories]
+                                    FROM [dbo].[Categories]
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True");
+                //SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True");
+                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
+                
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -100,11 +102,11 @@ namespace WebApplication6
                                 BEGIN
                                     SELECT [ID]
                                     ,[Categorie]
-                                    FROM [SE].[dbo].[Categories]
+                                    FROM [dbo].[Categories]
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True");
+                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -223,7 +225,7 @@ namespace WebApplication6
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True");
+                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -286,7 +288,7 @@ namespace WebApplication6
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True");
+                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -351,7 +353,7 @@ namespace WebApplication6
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True");
+                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -417,7 +419,7 @@ namespace WebApplication6
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True");
+                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -534,14 +536,14 @@ namespace WebApplication6
                                       ,[IsValid]
                                       ,[Firstname]
                                       ,[Name]
-                                  FROM [SE].[dbo].[Users]
+                                  FROM [dbo].[Users]
                                   WHERE
                                   Login = @mail COLLATE French_BIN
                                   and Login is not null and Login <>''
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True");
+                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -583,7 +585,7 @@ namespace WebApplication6
                                       ,[IsValid]
                                       ,[Firstname]
                                       ,[Name]
-                                  FROM [SE].[dbo].[Users]
+                                  FROM [dbo].[Users]
                                   WHERE
                                   Login like @Mail COLLATE French_BIN
                                   and Login is not null
@@ -593,7 +595,7 @@ namespace WebApplication6
                             ";
 
 
-                SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True");
+                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -658,7 +660,7 @@ namespace WebApplication6
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True");
+                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -762,7 +764,7 @@ namespace WebApplication6
                                 END");
 
 
-                using (SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True"))
+                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
 
@@ -861,7 +863,7 @@ namespace WebApplication6
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True");
+                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -898,7 +900,7 @@ namespace WebApplication6
                                       ,[IsValid]
                                       ,[Firstname]
                                       ,[Name]
-                                  FROM [SE].[dbo].[Users]
+                                  FROM [dbo].[Users]
                                   WHERE
                                   Login like @Mail COLLATE French_BIN
                                   and Login is not null and Login <>''
@@ -908,7 +910,7 @@ namespace WebApplication6
                             ";
 
 
-                SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True");
+                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
