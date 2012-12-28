@@ -19,6 +19,8 @@ namespace WebApplication6
     {
 
         public static List<Post> ShowPosts = new List<Post>();
+        public static int del;
+        
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -37,6 +39,7 @@ namespace WebApplication6
 
 
             RepeatPosts.DataSource = ShowPosts;
+            RptrMyPosts.DataSource = ShowPosts;
 
             if (!Page.IsPostBack)
             {
@@ -61,8 +64,8 @@ namespace WebApplication6
                             ";
 
                 //SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True");
-                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
-                
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
+
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -92,6 +95,53 @@ namespace WebApplication6
 
         }
 
+        protected string CategoryValue(int CatId)
+        {
+
+
+            try
+            {
+                string query = @"
+                                BEGIN
+                                    SELECT 
+                                    [Categorie]
+                                    FROM 
+                                    [dbo].[Categories]
+                                    WHERE
+                                    [ID] = @IdCat
+                                END
+                            ";
+
+                //SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True");
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
+
+                SqlCommand command = new SqlCommand(query, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+
+                command.CommandTimeout = 0;
+                DataSet result = new DataSet();
+                result.Locale = CultureInfo.InvariantCulture;
+
+                command.Parameters.AddWithValue("@IdCat", CatId);
+                adapter.Fill(result);
+
+                if (result != null && result.Tables.Count > 0 && result.Tables[0].Rows.Count > 0)
+                {
+
+                    return result.Tables[0].Rows[0]["Categorie"].ToString();
+                }
+
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+
+        }
+
         protected void LoadCategories2()
         {
 
@@ -106,7 +156,7 @@ namespace WebApplication6
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -132,8 +182,53 @@ namespace WebApplication6
 
             }
 
-
         }
+
+        protected void LoadCategoriesGen(DropDownList DDL)
+        {
+
+
+            try
+            {
+                string query = @"
+                                BEGIN
+                                    SELECT [ID]
+                                    ,[Categorie]
+                                    FROM [dbo].[Categories]
+                                END
+                            ";
+
+                //SqlConnection connection = new SqlConnection("Data Source=XRDT-PC\\SQLEXPRESS;Initial Catalog=SE;Integrated Security=True");
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
+
+                SqlCommand command = new SqlCommand(query, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+
+                command.CommandTimeout = 0;
+                DataSet result = new DataSet();
+                result.Locale = CultureInfo.InvariantCulture;
+
+                //command.Parameters.AddWithValue("@Mail", TxtbxMail.Text);
+                adapter.Fill(result);
+
+                if (result != null && result.Tables.Count > 0 && result.Tables[0].Rows.Count > 0)
+                {
+                    DDL.DataSource = result;
+                    DDL.DataTextField = "Categorie";
+                    DDL.DataValueField = "ID";
+                    DDL.DataBind();
+                    DDL.Items.Insert(0, new ListItem(""));
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+
 
         protected void SearchArticle(object sender, EventArgs e)
         {
@@ -143,6 +238,8 @@ namespace WebApplication6
             PnlAddPost.Visible = false;
             PnlGoodPost.Visible = false;
             PnlBadAfterConf.Visible = false;
+            PnlManagePost.Visible = false;
+            PnlEditPost.Visible = false;
             RefreshCurrentPost();
 
             // les 2 sont vides
@@ -225,7 +322,7 @@ namespace WebApplication6
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -288,7 +385,7 @@ namespace WebApplication6
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -353,7 +450,7 @@ namespace WebApplication6
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -384,6 +481,7 @@ namespace WebApplication6
         protected void LoadView()
         {
 
+            ShowPosts.Clear();
 
             try
             {
@@ -419,7 +517,7 @@ namespace WebApplication6
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -447,6 +545,8 @@ namespace WebApplication6
 
         protected void PostSelection(object sender, EventArgs e)
         {
+            PnlEditPost.Visible = false;
+            PnlManagePost.Visible = false;
             PnlGoodPost.Visible = false;
             PnlBadAfterConf.Visible = false;
             PnlValidMail.Visible = false;
@@ -462,16 +562,16 @@ namespace WebApplication6
             try
             {
 
-                int usr = isExitingUser();
+                int usr = isExitingUser(Login.Value.Trim());
 
                 if (isValid())
                 {
 
                     if (usr != 0)
                     {
-                        if (isCorrectUserLog())
+                        if (isCorrectUserLog(Login.Value.Trim(), Pass.Value.Trim()))
                         {
-                            if (isValidUser())
+                            if (isValidUser(Login.Value.Trim()))
                             {
                                 AddPost(usr, hiddenddlbCat1.Value);
                                 PnlAddPost.Visible = false;
@@ -522,7 +622,7 @@ namespace WebApplication6
             return 0;
         }
 
-        protected int isExitingUser()
+        protected int isExitingUser(string Log)
         {
             int user;
 
@@ -543,7 +643,7 @@ namespace WebApplication6
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -551,7 +651,7 @@ namespace WebApplication6
                 DataSet result = new DataSet();
                 result.Locale = CultureInfo.InvariantCulture;
 
-                command.Parameters.AddWithValue("@mail", Login.Value.Trim());
+                command.Parameters.AddWithValue("@mail", Log.Trim());
 
                 adapter.Fill(result);
 
@@ -573,7 +673,7 @@ namespace WebApplication6
 
 
 
-        protected bool isValidUser()
+        protected bool isValidUser(string Log)
         {
             try
             {
@@ -595,7 +695,7 @@ namespace WebApplication6
                             ";
 
 
-                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -603,7 +703,7 @@ namespace WebApplication6
                 DataSet result = new DataSet();
                 result.Locale = CultureInfo.InvariantCulture;
 
-                command.Parameters.AddWithValue("@Mail", Login.Value.Trim());
+                command.Parameters.AddWithValue("@Mail", Log.Trim());
 
                 adapter.Fill(result);
 
@@ -660,7 +760,7 @@ namespace WebApplication6
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -727,6 +827,12 @@ namespace WebApplication6
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Login"></param>
+        /// <param name="Pass"></param>
+        /// <returns></returns>
         protected int CreateUser(string Login, string Pass)
         {
             int NewUser;
@@ -764,7 +870,7 @@ namespace WebApplication6
                                 END");
 
 
-                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
 
@@ -863,7 +969,7 @@ namespace WebApplication6
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -884,7 +990,7 @@ namespace WebApplication6
         }
 
 
-        protected bool isCorrectUserLog()
+        protected bool isCorrectUserLog(string Log, string Pass)
         {
             sLogin.ForeColor = Color.Black;
             sPass.ForeColor = Color.Black;
@@ -910,7 +1016,7 @@ namespace WebApplication6
                             ";
 
 
-                SqlConnection connection = new SqlConnection("Server=17ec434a-c0ed-4061-a8ba-a10100b208ff.sqlserver.sequelizer.com;Database=db17ec434ac0ed4061a8baa10100b208ff;User ID=pqkhnhclwluqeqek;Password=iGcaTpHgMM4etMtGLTg8wxKqRmY3DH7vXTS3bCDvfqN2xbiogoaxEkcT6UrFxNKd;");
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
                 SqlCommand command = new SqlCommand(query, connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
 
@@ -918,8 +1024,8 @@ namespace WebApplication6
                 DataSet result = new DataSet();
                 result.Locale = CultureInfo.InvariantCulture;
 
-                command.Parameters.AddWithValue("@Mail", Login.Value.Trim());
-                command.Parameters.AddWithValue("@Pass", Pass.Value.Trim());
+                command.Parameters.AddWithValue("@Mail", Log.Trim());
+                command.Parameters.AddWithValue("@Pass", Pass.Trim());
 
                 adapter.Fill(result);
 
@@ -955,6 +1061,292 @@ namespace WebApplication6
 
 
 
+        protected void AccessMyPosts(object sender, EventArgs e)
+        {
+            PnlAccessMyPosts.Visible = true;
 
+            PnlEditPost.Visible = false;
+            PnlManagePost.Visible = false;
+            PnlGoodPost.Visible = false;
+            PnlBadAfterConf.Visible = false;
+            PnlValidMail.Visible = false;
+            PnlAddPost.Visible = false;
+            PnlViewSearch.Visible = false;
+        }
+
+
+        protected void ManagePosts(object sender, EventArgs e)
+        {
+            PnlManagePost.Visible = true;
+
+            PnlEditPost.Visible = false;
+            PnlAccessMyPosts.Visible = false;
+            PnlGoodPost.Visible = false;
+            PnlBadAfterConf.Visible = false;
+            PnlValidMail.Visible = false;
+            PnlAddPost.Visible = false;
+            PnlViewSearch.Visible = false;
+
+            if (isCorrectUserLog(LoginAccessMyPosts.Value.Trim(), PassAccessMyPosts.Value.Trim()) == true)
+            {
+                LoadUserPosts(isExitingUser(LoginAccessMyPosts.Value.Trim()));
+            }
+
+        }
+
+        protected void LoadUserPosts(int user)
+        {
+
+            ShowPosts.Clear();
+
+            try
+            {
+
+
+                string query = @"
+                                BEGIN
+
+                                SELECT 
+                                Base.[ID]
+                                ,Base.[Post]
+                                ,Base.[Fk_User]
+                                ,Cat.[Categorie]
+                                ,Base.[CreatedDate]
+                                FROM
+                                (
+                                SELECT 
+                                [ID]
+                                ,[Post]
+                                ,[Fk_User]
+                                ,[Fk_Categorie]
+                                ,[CreatedDate]
+                                FROM [dbo].[Posts]
+                                Where Fk_User = @User
+                                )  as Base
+                                left join
+                                [dbo].[Categories] as Cat
+                                on
+                                Base.Fk_Categorie = Cat.ID
+                                order by Cat.[Categorie], Base.CreatedDate desc 
+
+                                END
+                            ";
+
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
+                SqlCommand command = new SqlCommand(query, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+
+                command.CommandTimeout = 0;
+                DataSet result = new DataSet();
+                result.Locale = CultureInfo.InvariantCulture;
+
+                command.Parameters.AddWithValue("@User", user);
+
+                adapter.Fill(result);
+
+                foreach (DataRow reader in result.Tables[0].Rows)
+                {
+                    Post p = new Post(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Post"]), Convert.ToInt32(reader["Fk_User"]), Convert.ToString(reader["Categorie"]), Convert.ToDateTime(reader["CreatedDate"]));
+                    ShowPosts.Add(p);
+                    RptrMyPosts.DataBind();
+                }
+
+            }
+            catch (Exception ex)
+            {
+            }
+
+        }
+
+        protected void EditPost(object sender, EventArgs e)
+        {
+            PnlEditPost.Visible = true;
+
+            PnlManagePost.Visible = false;
+            PnlAccessMyPosts.Visible = false;
+            PnlGoodPost.Visible = false;
+            PnlBadAfterConf.Visible = false;
+            PnlValidMail.Visible = false;
+            PnlAddPost.Visible = false;
+            PnlViewSearch.Visible = false;
+
+            LoadCategoriesGen(ddlbCat1EditPost);
+
+            Button Btn = (Button)sender;
+            Label lbl = (Label)Btn.FindControl("LblID");
+            int Id = Int32.Parse(lbl.Text);
+
+
+            Post result = ShowPosts.Find(
+            delegate(Post pst)
+            {
+                return pst.Id == Id;
+            }
+            );
+
+
+            PostEditPost.Value = result._Post;
+
+            //ddlbCat1EditPost.SelectedValue = result.Categorie;
+            ListItem lstItm = ddlbCat1EditPost.Items.FindByText(result.Categorie);
+            ddlbCat1EditPost.SelectedIndex = Int32.Parse(lstItm.Value);
+            hiddenIdEditPostUser.Text = result.User.ToString();
+            hiddenIdEditPost.Text = result.Id.ToString();
+
+        }
+
+
+        protected bool isValidPostEdition()
+        {
+            sPostEditPost.ForeColor = Color.Black;
+            sCategorieEditPost.ForeColor = Color.Black;
+
+            var errors = 0;
+
+            if (PostEditPost.Value == "")
+            {
+                errors += 1;
+                sPostEditPost.ForeColor = Color.Red;
+            }
+
+            if (ddlbCat1EditPost.SelectedValue == "")
+            {
+                errors += 1;
+                sCategorieEditPost.ForeColor = Color.Red;
+            }
+
+            if (errors > 0)
+            {
+                return false;
+            }
+
+            return true;
+
+        }
+
+
+        protected void UpdatePost(object sender, EventArgs e)
+        {
+
+
+            try
+            {
+
+
+                if (isValidPostEdition())
+                {
+
+                    string query = @"
+                                BEGIN
+
+                                BEGIN TRAN  
+                                BEGIN TRY
+
+                                UPDATE [dbo].[Posts]
+                                   SET 
+                                   [Post] = @Post
+                                   ,[Fk_Categorie] = @Categorie
+                                   ,[CreatedDate] = GETDATE()
+                                 WHERE 
+                                [Fk_User] = @User
+                                AND
+                                ID= @ID
+
+                                COMMIT TRAN  
+                                END TRY  
+                                BEGIN CATCH  
+                                ROLLBACK TRAN  
+                                END CATCH  
+
+                                END
+                            ";
+
+                    SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
+                    SqlCommand command = new SqlCommand(query, connection);
+                    SqlDataAdapter adapter = new SqlDataAdapter(command);
+
+                    command.CommandTimeout = 0;
+                    DataSet result = new DataSet();
+                    result.Locale = CultureInfo.InvariantCulture;
+
+                    command.Parameters.AddWithValue("@Post", PostEditPost.Value.Trim());
+                    command.Parameters.AddWithValue("@Categorie", ddlbCat1EditPost.SelectedValue.Trim());
+                    command.Parameters.AddWithValue("@User", hiddenIdEditPostUser.Text.Trim());
+                    command.Parameters.AddWithValue("@ID", hiddenIdEditPost.Text.Trim());
+                    adapter.Fill(result);
+                    ManagePosts(sender, e);
+                }
+
+            }
+            catch (Exception ex)
+            {
+            }
+
+        }
+        protected bool deletePostFromDb(int PostId)
+        {
+            try
+            {
+
+                    string query = @"
+                                BEGIN
+
+                                BEGIN TRAN  
+                                BEGIN TRY
+
+                                DELETE FROM [dbo].[Posts]                               
+                                WHERE 
+                                [ID] = @ID
+
+                                COMMIT TRAN  
+                                END TRY  
+                                BEGIN CATCH  
+                                ROLLBACK TRAN  
+                                END CATCH  
+
+                                END
+                            ";
+
+                    SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
+                    SqlCommand command = new SqlCommand(query, connection);
+                    SqlDataAdapter adapter = new SqlDataAdapter(command);
+
+                    command.CommandTimeout = 0;
+                    DataSet result = new DataSet();
+                    result.Locale = CultureInfo.InvariantCulture;
+
+                    command.Parameters.AddWithValue("@ID", PostId);
+                    adapter.Fill(result);
+                    return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }        
+        }
+
+        protected void DeletePost(object sender, EventArgs e)
+        {
+
+            Button Btn = (Button)sender;
+            Label lbl = (Label)Btn.FindControl("LblID");
+            int Id = Int32.Parse(lbl.Text);
+
+
+            if (deletePostFromDb(Id))
+            {
+
+                for (int i = 0; i < ShowPosts.Count; i++)
+                {
+                    if (ShowPosts[i].Id == Id)
+                    {
+                        del = i;
+                    }
+                }
+                ShowPosts.RemoveAt(del);
+                RptrMyPosts.DataBind();
+            }
+        }
     }
 }

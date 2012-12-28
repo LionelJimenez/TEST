@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shfbBuild product="Sandcastle Help File Builder" version="1.9.5.0" projectFile="C:\Users\Xrdt\Desktop\TEST\WebApplication6\Documentation\Documt.shfbproj" started="7/11/2012 10:53:00">
+<buildStep step="Initializing">
+    Last step completed in 00:00:00.0000
+</buildStep>
+<buildStep step="Failed">
+
+SHFB: Error BE0034: The &#39;OutputPath&#39; property resolved to &#39;C:\Users\Xrdt\Desktop\TEST\WebApplication6\&#39; which is a reserved folder name.  See error or property topic in help file for details.
+
+</buildStep>
+</shfbBuild>
