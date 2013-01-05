@@ -1,0 +1,10 @@
+c:\users\xrdt\documents\visual studio 2010\Projects\ServicesExchange\ServicesExchange\bin\ServicesExchange.dll
+c:\users\xrdt\documents\visual studio 2010\Projects\ServicesExchange\ServicesExchange\bin\ServicesExchange.pdb
+c:\users\xrdt\documents\visual studio 2010\Projects\ServicesExchange\ServicesExchange\obj\Debug\ResolveAssemblyReference.cache
+c:\users\xrdt\documents\visual studio 2010\Projects\ServicesExchange\ServicesExchange\obj\Debug\ServicesExchange.dll
+c:\users\xrdt\documents\visual studio 2010\Projects\ServicesExchange\ServicesExchange\obj\Debug\ServicesExchange.pdb
+C:\Users\Xrdt\Desktop\TEST\ServicesExchange\bin\ServicesExchange.dll
+C:\Users\Xrdt\Desktop\TEST\ServicesExchange\bin\ServicesExchange.pdb
+C:\Users\Xrdt\Desktop\TEST\ServicesExchange\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Xrdt\Desktop\TEST\ServicesExchange\obj\Debug\ServicesExchange.dll
+C:\Users\Xrdt\Desktop\TEST\ServicesExchange\obj\Debug\ServicesExchange.pdb
