@@ -17,18 +17,32 @@ namespace ServicesExchange
 {
 	public partial class AddPost : System.Web.UI.Page
 	{
-
+        public static int ActivatedSession;
+        public static AppUser Usr;
         protected void Page_Load(object sender, EventArgs e)
         {
 
 
             if (Session["User"] != null)
             {
-                AppUser Usr = (AppUser)Session["User"];
-                Login.Value = Usr.Login;
-                //Pass.Text = Usr.Pass;
-                Pass.Attributes.Add("value", "ThePassword");
+                Usr = (AppUser)Session["User"];
 
+                if (Login.Value == "")
+                {
+                    Pass.Attributes.Add("value", "ThePassword");
+                }
+                else
+                {
+                    Pass.Attributes.Add("value", "");
+                }
+                
+
+                ActivatedSession = 1;                
+                Login.Value = Usr.Login;                                
+            }
+            else 
+            {
+                ActivatedSession = 0;
             }
 
             string _Login = Request.Params["Lgn"];
@@ -71,10 +85,19 @@ namespace ServicesExchange
             try
             {
 
+                if (ActivatedSession == 1 && Pass.Text == "ThePassword")
+                {
+                    Pass.Text = Usr.Pass;
+                }
+
                 bool ExistUsr = AppUser.isExitingUser(Login.Value.Trim());
+
 
                 if (isValidForm())
                 {
+                    int DdlIndex = Convert.ToInt32(hiddenddlbCat1.Value);
+                    string SelectedCat = ddlbCat.Items[DdlIndex].Text;
+                    int categoryId = Category.GetCategoryId(SelectedCat);
 
                     if (ExistUsr)
                     {
@@ -82,7 +105,7 @@ namespace ServicesExchange
                         {
                             if (AppUser.isValidUser(Login.Value.Trim()))
                             {
-                                AddNewPost(AppUser.GetUserId(Login.Value.Trim(), Pass.Text.Trim()), hiddenddlbCat1.Value, Post.InnerText);
+                                AddNewPost(AppUser.GetUserId(Login.Value.Trim(), Pass.Text.Trim()), categoryId, Post.InnerText);
                                 PnlAddPost.Visible = false;
                                 PnlGoodPost.Visible = true;
                                 RefreshCurrentPost();
@@ -91,7 +114,7 @@ namespace ServicesExchange
                             {
                                 //Veuillez valider votre e-mail et on renvoit.
                                 AppUser.SendMailForValidation(Login.Value.Trim(), Pass.Text.Trim());
-                                AddNewPost(AppUser.GetUserId(Login.Value.Trim(), Pass.Text.Trim()), hiddenddlbCat1.Value, Post.InnerText);
+                                AddNewPost(AppUser.GetUserId(Login.Value.Trim(), Pass.Text.Trim()), categoryId, Post.InnerText);
                                 PnlAddPost.Visible = false;
                                 PnlBadAfterConf.Visible = true;
                                 RefreshCurrentPost();
@@ -105,7 +128,7 @@ namespace ServicesExchange
                         int iduser = AppUser.CreateNewUser(Login.Value, Pass.Text);
                         //Post
                         AppUser.SendMailForValidation(Login.Value.Trim(), Pass.Text.Trim());
-                        AddNewPost(iduser, hiddenddlbCat1.Value, Post.InnerText);
+                        AddNewPost(iduser, categoryId, Post.InnerText);
                         PnlAddPost.Visible = false;
                         PnlBadAfterConf.Visible = true;
                         RefreshCurrentPost();
@@ -118,7 +141,7 @@ namespace ServicesExchange
             }
         }
 
-        protected void AddNewPost(int user, string category, string PostTxt)
+        protected void AddNewPost(int user, int category, string PostTxt)
         {            
             ServicesExchange.Post.AddNewPostQuery(user, category, PostTxt);
             RefreshCurrentPost();

@@ -46,33 +46,45 @@ namespace ServicesExchange
 
         protected void SearchArticle(object sender, EventArgs e)
         {
-            string SelectedCat = hiddenddlbCat.Value;
+            int categoryId;
+
+            if (hiddenddlbCat.Value != "")
+            {
+                int DdlIndex = Convert.ToInt32(hiddenddlbCat.Value);
+                string SelectedCat = ddlbCat.Items[DdlIndex].Text;
+                categoryId = Category.GetCategoryId(SelectedCat);
+            }
+            else
+            {
+                categoryId = 0;
+            }
+
 
             ShowPosts.Clear();
             RepeatPosts.DataBind();
 
             // les 2 sont vides
-            if (string.IsNullOrEmpty(txtbxSearchArticle.Text) && SelectedCat == "")
+            if (string.IsNullOrEmpty(txtbxSearchArticle.Text) && categoryId == 0)
             {
                 LoadView();
             }
             else
             {             
                 //MC seul
-                if (!string.IsNullOrEmpty(txtbxSearchArticle.Text) && SelectedCat == "")
+                if (!string.IsNullOrEmpty(txtbxSearchArticle.Text) && categoryId == 0)
                 {
                     SearchMC(txtbxSearchArticle.Text);
                 }
 
                 //Cat seule
-                else if (string.IsNullOrEmpty(txtbxSearchArticle.Text) && SelectedCat != "")
+                else if (string.IsNullOrEmpty(txtbxSearchArticle.Text) && categoryId != 0)
                 {
-                    SearchCat(SelectedCat);
+                    SearchCat(categoryId);
                 }
                 //les 2
-                else if (!string.IsNullOrEmpty(txtbxSearchArticle.Text) && SelectedCat != "")
+                else if (!string.IsNullOrEmpty(txtbxSearchArticle.Text) && categoryId != 0)
                 {
-                    SearchMC_Cat(txtbxSearchArticle.Text, SelectedCat);
+                    SearchMC_Cat(txtbxSearchArticle.Text, categoryId);
                 }
             }
 
@@ -81,54 +93,50 @@ namespace ServicesExchange
         protected void SearchMC(string MC)
         {
 
-            DataSet result;
+            List<Post> result = new List<Post>();
 
-            if (Post.getPostsByMC(MC) != null)
+            result = Post.getPostsByMC(MC);
+
+            if (result != null)
             {
-                result = Post.getPostsByMC(MC);
-
-
-                foreach (DataRow reader in result.Tables[0].Rows)
-                {
-                    Post p = new Post(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Post"]), Convert.ToInt32(reader["Fk_User"]), Convert.ToString(reader["Categorie"]), Convert.ToDateTime(reader["CreatedDate"]));
-                    ShowPosts.Add(p);
+                foreach (Post pst in result)
+                {                    
+                    ShowPosts.Add(pst);
                     RepeatPosts.DataBind();
                 }
             }
         }
 
-        protected void SearchCat(string Cat)
+        protected void SearchCat(int Cat)
         {
 
-            DataSet result;
-            if (Post.getPostsByCat(Cat) != null)
+            List<Post> result = new List<Post>();
+
+            result = Post.getPostsByCat(Cat);
+
+            if (result != null)
             {
-                result = Post.getPostsByCat(Cat);
-
-
-                foreach (DataRow reader in result.Tables[0].Rows)
-                {
-                    Post p = new Post(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Post"]), Convert.ToInt32(reader["Fk_User"]), Convert.ToString(reader["Categorie"]), Convert.ToDateTime(reader["CreatedDate"]));
-                    ShowPosts.Add(p);
+                foreach (Post pst in result)
+                {                    
+                    ShowPosts.Add(pst);
                     RepeatPosts.DataBind();
                 }
             }
 
         }
 
-        protected void SearchMC_Cat(string MC, string Cat)
+        protected void SearchMC_Cat(string MC, int Cat)
         {
 
-            DataSet result;
+            List<Post> result = new List<Post>();
 
-            if (Post.getPostsByCat_MC(MC,Cat) != null)
-            {
-                result = Post.getPostsByCat_MC(MC, Cat);
+            result = Post.getPostsByCat_MC(MC, Cat);
 
-                foreach (DataRow reader in result.Tables[0].Rows)
+            if (result != null)
+            {               
+                foreach (Post pst in result)
                 {
-                    Post p = new Post(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Post"]), Convert.ToInt32(reader["Fk_User"]), Convert.ToString(reader["Categorie"]), Convert.ToDateTime(reader["CreatedDate"]));
-                    ShowPosts.Add(p);
+                    ShowPosts.Add(pst);
                     RepeatPosts.DataBind();
                 }
             }
@@ -138,16 +146,16 @@ namespace ServicesExchange
         protected void LoadView()
         {
             ShowPosts.Clear();
-            DataSet result;
 
-            if (Post.getLatestPosts() != null)
-            {
-                result = Post.getLatestPosts();
+            List<Post> result = new List<Post>();
 
-                foreach (DataRow reader in result.Tables[0].Rows)
-                {
-                    Post p = new Post(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Post"]), Convert.ToInt32(reader["Fk_User"]), Convert.ToString(reader["Categorie"]), Convert.ToDateTime(reader["CreatedDate"]));
-                    ShowPosts.Add(p);
+            result = Post.getLatestPosts();
+
+            if (result != null)
+            {                
+                foreach (Post pst in result)
+                {                    
+                    ShowPosts.Add(pst);
                     RepeatPosts.DataBind();
                 }
             }

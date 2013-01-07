@@ -58,14 +58,15 @@ namespace ServicesExchange
 
             ShowPosts.Clear();
 
-            DataSet result = Post.LoadUserPostsQuery(user);
+            List<Post> result = new List<Post>();
+
+            result = Post.LoadUserPostsQuery(user);
 
             if (result != null)
             {
-                foreach (DataRow reader in result.Tables[0].Rows)
-                {
-                    Post p = new Post(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Post"]), Convert.ToInt32(reader["Fk_User"]), Convert.ToString(reader["Categorie"]), Convert.ToDateTime(reader["CreatedDate"]));
-                    ShowPosts.Add(p);
+                foreach (Post pst in result)
+                {                    
+                    ShowPosts.Add(pst);
                     RptrMyPosts.DataBind();
                 }
             }

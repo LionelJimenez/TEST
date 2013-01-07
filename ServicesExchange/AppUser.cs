@@ -335,9 +335,13 @@ namespace ServicesExchange
 
             try
             {
-
-
-                string query = string.Format(@"
+                if (Login == "" || Login == null || Pass == "" || Pass == null)
+                {
+                    return 0;
+                }
+                else
+                {
+                    string query = string.Format(@"
                                 BEGIN
                                     BEGIN TRAN  
                                     BEGIN TRY
@@ -354,10 +358,8 @@ namespace ServicesExchange
                                            ,@Password
                                            ,0
                                            )
+                                            Select @@Identity;               
 
-                                            Select @@Identity;
-
-                                                                    
                                         COMMIT TRAN  
                                     END TRY  
                                     BEGIN CATCH  
@@ -366,20 +368,21 @@ namespace ServicesExchange
                                 END");
 
 
-                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
+                    SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
 
-                    command.CommandTimeout = 0;
-                    command.Parameters.AddWithValue("@Login", Login.Trim());
-                    command.Parameters.AddWithValue("@Password", Pass.Trim());
-                    connection.Open();
+                        command.CommandTimeout = 0;
+                        command.Parameters.AddWithValue("@Login", Login.Trim());
+                        command.Parameters.AddWithValue("@Password", Pass.Trim());
+                        connection.Open();
 
-                    NewUser = Convert.ToInt32(command.ExecuteScalar());
+                        NewUser = Convert.ToInt32(command.ExecuteScalar());
+                    }
+
+
+                    return NewUser;
                 }
-
-
-                return NewUser;
 
             }
             catch (Exception ex)

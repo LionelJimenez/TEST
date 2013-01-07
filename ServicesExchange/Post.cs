@@ -13,6 +13,9 @@ namespace ServicesExchange
     [DataContract]
     public class Post
     {
+
+        public static List<Post> ListPosts;
+
         [DataMember]
         public int Id { get; set; }
 
@@ -39,8 +42,9 @@ namespace ServicesExchange
         }
 
 
-        public static DataSet getLatestPosts()
+        public static List<Post> getLatestPosts()
         {
+            ListPosts = new List<Post>();
 
             try
             {
@@ -72,7 +76,7 @@ namespace ServicesExchange
 									[dbo].[Categories] as Cat
 									on
 									Base.Fk_Categorie = Cat.ID
-                                    order by Cat.[Categorie], Base.CreatedDate desc
+                                    order by Cat.[Categorie], Base.CreatedDate desc 
                                 END
                             ";
 
@@ -86,8 +90,20 @@ namespace ServicesExchange
 
                 adapter.Fill(result);
 
+                if (result != null && result.Tables.Count > 0 && result.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow reader in result.Tables[0].Rows)
+                    {
+                        Post P = new Post(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Post"]), Convert.ToInt32(reader["Fk_User"]), Convert.ToString(reader["Categorie"]), Convert.ToDateTime(reader["CreatedDate"]));
+                        ListPosts.Add(P);
+                    }
 
-                return result;
+                    return ListPosts;
+                }
+                else
+                {
+                    return null;
+                }
 
             }
             catch (Exception ex)
@@ -98,8 +114,10 @@ namespace ServicesExchange
         }
 
 
-        public static DataSet getPostsByMC(string MC)
+        public static List<Post> getPostsByMC(string MC)
         {
+            ListPosts = new List<Post>();
+
             try
             {
                 string query = @"
@@ -145,17 +163,33 @@ namespace ServicesExchange
                 command.Parameters.AddWithValue("@MC", MC);
                 adapter.Fill(result);
 
-                return result;
+                if (result != null && result.Tables.Count > 0 && result.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow reader in result.Tables[0].Rows)
+                    {
+                        Post P = new Post(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Post"]), Convert.ToInt32(reader["Fk_User"]), Convert.ToString(reader["Categorie"]), Convert.ToDateTime(reader["CreatedDate"]));
+                        ListPosts.Add(P);
+                    }
+
+                    return ListPosts;
+                }
+                else
+                {
+                    return null;
+                }
 
             }
             catch (Exception ex)
             {
                 return null;
             }
+
         }
 
-        public static DataSet getPostsByCat(string Cat)
+        public static List<Post> getPostsByCat(int Cat)
         {
+            ListPosts = new List<Post>();
+
             try
             {
                 string query = @"
@@ -202,7 +236,20 @@ namespace ServicesExchange
 
                 adapter.Fill(result);
 
-                return result;
+                if (result != null && result.Tables.Count > 0 && result.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow reader in result.Tables[0].Rows)
+                    {
+                        Post P = new Post(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Post"]), Convert.ToInt32(reader["Fk_User"]), Convert.ToString(reader["Categorie"]), Convert.ToDateTime(reader["CreatedDate"]));
+                        ListPosts.Add(P);
+                    }
+
+                    return ListPosts;
+                }
+                else
+                {
+                    return null;
+                }
 
             }
             catch (Exception ex)
@@ -210,10 +257,13 @@ namespace ServicesExchange
                 return null;
             }
 
+
         }
 
-        public static DataSet getPostsByCat_MC(string MC, string Cat)
+        public static List<Post> getPostsByCat_MC(string MC, int Cat)
         {
+            ListPosts = new List<Post>();
+
             try
             {
                 string query = @"
@@ -263,24 +313,41 @@ namespace ServicesExchange
 
                 adapter.Fill(result);
 
-                return result;
-
+                if (result != null && result.Tables.Count > 0 && result.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow reader in result.Tables[0].Rows)
+                    {
+                        Post P = new Post(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Post"]), Convert.ToInt32(reader["Fk_User"]), Convert.ToString(reader["Categorie"]), Convert.ToDateTime(reader["CreatedDate"]));
+                        ListPosts.Add(P);
+                    }
+                    return ListPosts;
+                }
+                else
+                {
+                    return null;
+                }
             }
             catch (Exception ex)
             {
                 return null;
             }
-
         }
 
-        public static void AddNewPostQuery(int user, string category, string PostTxt)
+
+        public static int AddNewPostQuery(int user, int category, string PostTxt)
         {
+            int NewPost;
 
             try
             {
 
-
-                string query = @"
+                if (user == 0 || category == 0 || PostTxt.Trim() == "" || PostTxt == null)
+                {
+                    return 0;
+                }
+                else
+                {
+                    string query = string.Format(@"
                                 BEGIN
 
                                 BEGIN TRAN  
@@ -302,6 +369,8 @@ namespace ServicesExchange
                                    ,GETDATE()
                                    )
 
+                                Select @@Identity;
+
                                 COMMIT TRAN  
                                 END TRY  
                                 BEGIN CATCH  
@@ -309,30 +378,38 @@ namespace ServicesExchange
                                 END CATCH  
 
                                 END
-                            ";
+                                        ");
 
-                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
-                SqlCommand command = new SqlCommand(query, connection);
-                SqlDataAdapter adapter = new SqlDataAdapter(command);
 
-                command.CommandTimeout = 0;
-                DataSet result = new DataSet();
-                result.Locale = CultureInfo.InvariantCulture;
+                    SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
 
-                command.Parameters.AddWithValue("@Cat", category.Trim());
-                command.Parameters.AddWithValue("@user", user);
-                command.Parameters.AddWithValue("@post", PostTxt.Trim());
+                        command.CommandTimeout = 0;
+                        command.Parameters.AddWithValue("@Cat", category);
+                        command.Parameters.AddWithValue("@user", user);
+                        command.Parameters.AddWithValue("@post", PostTxt.Trim());
+                        connection.Open();
 
-                adapter.Fill(result);
+                        NewPost = Convert.ToInt32(command.ExecuteScalar());
+                    }
+
+                    return NewPost;
+                }
 
             }
             catch (Exception ex)
             {
+                return 0;
             }
+
         }
 
-        public static DataSet LoadUserPostsQuery(int user)
+
+        public static List<Post> LoadUserPostsQuery(int user)
         {
+            ListPosts = new List<Post>();
+
             try
             {
                 string query = @"
@@ -376,7 +453,20 @@ namespace ServicesExchange
 
                 adapter.Fill(result);
 
-                return result;
+                if (result != null && result.Tables.Count > 0 && result.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow reader in result.Tables[0].Rows)
+                    {
+                        Post P = new Post(Convert.ToInt32(reader["ID"]), Convert.ToString(reader["Post"]), Convert.ToInt32(reader["Fk_User"]), Convert.ToString(reader["Categorie"]), Convert.ToDateTime(reader["CreatedDate"]));
+                        ListPosts.Add(P);
+                    }
+
+                    return ListPosts;
+                }
+                else
+                {
+                    return null;
+                }
 
             }
             catch (Exception ex)
@@ -389,10 +479,19 @@ namespace ServicesExchange
 
         public static bool deletePostFromDb(int PostId)
         {
+
             try
             {
-
-                string query = @"
+                if (PostId == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    // il faut que ce post existe pour l'updater
+                    if (GetPostById(PostId) != null)
+                    {
+                        string query = @"
                                 BEGIN
 
                                 BEGIN TRAN  
@@ -411,18 +510,31 @@ namespace ServicesExchange
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
-                SqlCommand command = new SqlCommand(query, connection);
-                SqlDataAdapter adapter = new SqlDataAdapter(command);
+                        SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
+                        SqlCommand command = new SqlCommand(query, connection);
+                        SqlDataAdapter adapter = new SqlDataAdapter(command);
 
-                command.CommandTimeout = 0;
-                DataSet result = new DataSet();
-                result.Locale = CultureInfo.InvariantCulture;
+                        command.CommandTimeout = 0;
+                        DataSet result = new DataSet();
+                        result.Locale = CultureInfo.InvariantCulture;
 
-                command.Parameters.AddWithValue("@ID", PostId);
-                adapter.Fill(result);
+                        command.Parameters.AddWithValue("@ID", PostId);
+                        adapter.Fill(result);
 
-                return true;
+                        if (result != null)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
 
             }
             catch (Exception ex)
@@ -436,8 +548,16 @@ namespace ServicesExchange
 
             try
             {
-
-                string query = @"
+                if (user == 0 || category == 0 || postId == 0 || post == "" || post == null)
+                {
+                    return 0;
+                }
+                else
+                {
+                    // il faut que ce post existe pour l'updater
+                    if (GetPostById(postId) != null)
+                    {
+                        string query = @"
                                 BEGIN
 
                                 BEGIN TRAN  
@@ -462,27 +582,34 @@ namespace ServicesExchange
                                 END
                             ";
 
-                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
-                SqlCommand command = new SqlCommand(query, connection);
-                SqlDataAdapter adapter = new SqlDataAdapter(command);
+                        SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
+                        SqlCommand command = new SqlCommand(query, connection);
+                        SqlDataAdapter adapter = new SqlDataAdapter(command);
 
-                command.CommandTimeout = 0;
-                DataSet result = new DataSet();
-                result.Locale = CultureInfo.InvariantCulture;
+                        command.CommandTimeout = 0;
+                        DataSet result = new DataSet();
+                        result.Locale = CultureInfo.InvariantCulture;
 
-                command.Parameters.AddWithValue("@Post", post);
-                command.Parameters.AddWithValue("@Categorie", category);
-                command.Parameters.AddWithValue("@User", user);
-                command.Parameters.AddWithValue("@ID", postId);
-                adapter.Fill(result);
+                        command.Parameters.AddWithValue("@Post", post);
+                        command.Parameters.AddWithValue("@Categorie", category);
+                        command.Parameters.AddWithValue("@User", user);
+                        command.Parameters.AddWithValue("@ID", postId);
+                        adapter.Fill(result);
 
-                if (result != null)
-                {
-                    return postId;
-                }
-                else
-                {
-                    return 0;
+                        if (result != null)
+                        {
+                            return postId;
+                        }
+                        else
+                        {
+                            return 0;
+                        }
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -491,6 +618,55 @@ namespace ServicesExchange
             }
 
         }
+
+        public static Post GetPostById(int postId)
+        {
+            try
+            {
+                string query = @"
+                                BEGIN
+                                    SELECT 
+                                    [ID]
+                                    ,[Post]
+                                    ,[Fk_User]
+                                    ,[Fk_Categorie]
+                                    ,[CreatedDate]
+                                    FROM 
+                                    [dbo].[Posts]
+                                    where [ID] = @postId
+                                END
+                            ";
+
+                SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["db_SE"].ConnectionString);
+                SqlCommand command = new SqlCommand(query, connection);
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+
+                command.CommandTimeout = 0;
+                DataSet result = new DataSet();
+                result.Locale = CultureInfo.InvariantCulture;
+
+                command.Parameters.AddWithValue("@postId", postId);
+
+
+                adapter.Fill(result);
+
+                if (result != null && result.Tables[0].Rows.Count > 0)
+                {
+                    Post P = new Post(Convert.ToInt32(result.Tables[0].Rows[0]["ID"]), Convert.ToString(result.Tables[0].Rows[0]["Post"]), Convert.ToInt32(result.Tables[0].Rows[0]["Fk_User"]), Convert.ToString(result.Tables[0].Rows[0]["Fk_Categorie"]), Convert.ToDateTime(result.Tables[0].Rows[0]["CreatedDate"]));
+                    return P;
+                }
+                else
+                {
+                    return null;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
 
 
     }

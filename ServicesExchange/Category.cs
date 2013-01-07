@@ -155,13 +155,13 @@ namespace ServicesExchange
                 }
                 else
                 {
-                    return "";
+                    return null;
                 }
 
             }
             catch (Exception ex)
             {
-                return "";
+                return null;
             }
         }
 

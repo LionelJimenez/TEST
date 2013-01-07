@@ -9,6 +9,9 @@ namespace ServicesExchange
 {
     public partial class WebAccess : System.Web.UI.Page
     {
+
+        // verifier les parametres d'entrée des fonctions!
+
         public static string Log;
         public static string Pass;
         public static string posttxt;
@@ -16,19 +19,22 @@ namespace ServicesExchange
         public static int categoryid;
         public static int userid;
         public static int postid;
-        
+        public static string mc;
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            try
+            {
                 string Class = Request.Params["Cl"];
                 string Func = Request.Params["Fc"];
-                Log  = Request.Params["Log"];
+                Log = Request.Params["Log"];
                 Pass = Request.Params["Pass"];
-                posttxt  = Request.Params["Post"];
+                posttxt = Request.Params["Post"];
                 categorytxt = Request.Params["Categorytxt"];
-                categoryid = Convert.ToInt32(Request.Params["Categoryid"]);                
-                userid  = Convert.ToInt32(Request.Params["UserId"]);
+                categoryid = Convert.ToInt32(Request.Params["Categoryid"]);
+                userid = Convert.ToInt32(Request.Params["UserId"]);
                 postid = Convert.ToInt32(Request.Params["PostId"]);
+                mc = Request.Params["Mc"];
 
 
                 if (Class != null && Func != null)
@@ -54,6 +60,11 @@ namespace ServicesExchange
                         SessionFunctions(Func);
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Response.Write(false);
+            }
 
         }
 
@@ -151,48 +162,77 @@ namespace ServicesExchange
 
         protected void PostFunctions(string Function)
         {
-            //if (Function == "")
-            //{
-            //    Post.AddNewPostQuery(userid, categoryid, posttxt);
-            //}
+            if (Function == "getLatestPosts")
+            {
+                List<Post> LstPst = Post.getLatestPosts();
 
-            //if (Function == "")
-            //{
-            //    Post.deletePostFromDb(postid);
-            //}
+                string jsonString = JsonHelper.JsonSerializer<List<Post>>(LstPst);
+                Response.Write(jsonString);
+            }
 
-            //if (Function == "")
-            //{
-            //    Post.getLatestPosts();
-            //}
+            if (Function == "getPostsByMC")
+            {
+                List<Post> LstPst = Post.getPostsByMC(mc);
 
-            //if (Function == "")
-            //{
-            //    // changer la fonction => prendre un entier
-            //    Post.getPostsByCat(categoryid);
-            //}
+                string jsonString = JsonHelper.JsonSerializer<List<Post>>(LstPst);
+                Response.Write(jsonString);
+            }
 
-            //if (Function == "")
-            //{
-            //    // changer la fonction => prendre un entier
-            //    Post.getPostsByCat_MC(categoryid);
-            //}
+            if (Function == "getPostsByCat")
+            {
+                List<Post> LstPst = Post.getPostsByCat(categoryid);
 
-            //if (Function == "")
-            //{
-            //    // changer la fonction => prendre un entier
-            //    Post.getPostsByMC(categoryid);
-            //}
+                string jsonString = JsonHelper.JsonSerializer<List<Post>>(LstPst);
+                Response.Write(jsonString);
+            }
 
-            //if (Function == "")
-            //{
-            //    Post.LoadUserPostsQuery(userid);
-            //}        
+            if (Function == "getPostsByCat_MC")
+            {
+                List<Post> LstPst = Post.getPostsByCat_MC(mc, categoryid);
 
-            //if (Function == "")
-            //{
-            //    Post.UpdatePost(posttxt, categoryid, userid, postid);
-            //}        
+                string jsonString = JsonHelper.JsonSerializer<List<Post>>(LstPst);
+                Response.Write(jsonString);
+            }
+
+            if (Function == "LoadUserPostsQuery")
+            {
+                List<Post> LstPst = Post.LoadUserPostsQuery(userid);
+
+                string jsonString = JsonHelper.JsonSerializer<List<Post>>(LstPst);
+                Response.Write(jsonString);
+            }
+
+            if (Function == "AddNewPostQuery")
+            {
+                int PstId = Post.AddNewPostQuery(userid, categoryid, posttxt);
+
+                string jsonString = JsonHelper.JsonSerializer<Int32>(PstId);
+                Response.Write(jsonString);
+            }
+
+            if (Function == "deletePostFromDb")
+            {
+                bool bl = Post.deletePostFromDb(postid);
+
+                string jsonString = JsonHelper.JsonSerializer<bool>(bl);
+                Response.Write(jsonString);
+            }
+
+            if (Function == "UpdatePost")
+            {
+                int PstId = Post.UpdatePost(posttxt, categoryid, userid, postid);
+
+                string jsonString = JsonHelper.JsonSerializer<Int32>(PstId);
+                Response.Write(jsonString);
+            }
+
+            if (Function == "GetPostById")
+            {
+                Post Pst = Post.GetPostById(postid);
+
+                string jsonString = JsonHelper.JsonSerializer<Post>(Pst);
+                Response.Write(jsonString);
+            }
 
         }
 
@@ -210,11 +250,8 @@ namespace ServicesExchange
                 string jsonString = JsonHelper.JsonSerializer<Int32>(SessStatus);
                 Response.Write(jsonString);
 
-            }        
+            }
         }
-
-
-        ////////////////////////////////////////////
 
         protected void SetUserSession(int userid)
         {

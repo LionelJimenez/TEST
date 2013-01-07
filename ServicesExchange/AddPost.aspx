@@ -83,7 +83,7 @@
                     </div>
                     <div style="width: 353px; margin-left: 20px;">
                         <asp:Label ID="sPass" runat="server">Mot de passe *: </asp:Label>
-                        <asp:TextBox runat="server" ID="Pass" TextMode="Password" style="margin-top: 0px; margin-left: 10px;
+                        <asp:TextBox runat="server" ID="Pass" TextMode="Password" onfocus="InitializeField()" style="margin-top: 0px; margin-left: 10px;
                             width: 150px;border: 1px solid #6A7075;height: 22px;" ></asp:TextBox>
                                 
                         <span>(6 caractères)</span>
@@ -129,7 +129,7 @@
                 document.getElementById("hiddenddlbCat1").value = document.getElementById("ddlbCat1").value;
             }
             function InitializeField() {
-                document.getElementById('<%= Pass.ClientID %>').Text = "";
+                document.getElementById("Pass").value = "";
                 
             }
         </script>
